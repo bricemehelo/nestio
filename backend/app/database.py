@@ -66,3 +66,7 @@ def get_db():
         yield db  # The session is passed to whoever needs it (the repository)
     finally:
         db.close()  # Always close — prevents connection leaks
+
+# Import all models here so SQLAlchemy's Base is aware of them
+# Alembic reads Base.metadata to detect tables — models must be imported first
+from app.models import property  # noqa: F401
