@@ -83,3 +83,18 @@ class PropertyResponse(PropertyBase):
 class PropertyListResponse(BaseModel):
     total: int
     properties: list[PropertyResponse]
+
+# PropertyUpdate is used for PATCH requests — partial updates.
+# Every field is Optional — the client sends only what they want to change.
+# exclude_unset=True in the repository ensures unset fields are ignored entirely.
+class PropertyUpdate(BaseModel):
+    title: Optional[str] = Field(None, min_length=1, max_length=255)
+    description: Optional[str] = None
+    price: Optional[Decimal] = Field(None, gt=0)
+    address: Optional[str] = Field(None, min_length=1, max_length=500)
+    city: Optional[str] = Field(None, min_length=1, max_length=100)
+    latitude: Optional[float] = Field(None, ge=-90, le=90)
+    longitude: Optional[float] = Field(None, ge=-180, le=180)
+    property_type: Optional[str] = Field(None, min_length=1, max_length=50)
+    status: Optional[str] = Field(None, min_length=1, max_length=50)
+ 
