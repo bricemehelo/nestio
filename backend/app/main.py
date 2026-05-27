@@ -8,6 +8,8 @@
 
 # FastAPI is the web framework — handles HTTP requests and responses
 from fastapi import FastAPI
+from app.routers import properties
+
 
 # CORSMiddleware allows our React frontend (on a different port)
 # to make requests to this API without being blocked by the browser
@@ -22,6 +24,8 @@ app = FastAPI(
     description="Property listings API built with FastAPI",
     version="1.0.0"
 )
+app.include_router(properties.router)
+
 
 # ── Register CORS Middleware ──────────────────────────────────
 # CORS (Cross-Origin Resource Sharing) is a browser security rule.

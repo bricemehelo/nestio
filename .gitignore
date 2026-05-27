@@ -3,7 +3,7 @@
 # Tells Git which files to never track or commit
 # ─────────────────────────────────────────────
 
-
+backend-context.md
 # ── Python / Backend ─────────────────────────
 # Virtual environment — never commit this
 # It is huge and machine-specific
