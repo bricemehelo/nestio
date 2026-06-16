@@ -26,7 +26,7 @@ from app.schemas.property import (
 # APIRouter groups all property routes together under the /properties prefix
 # This router is registered in main.py — keeping routes modular and organised
 router = APIRouter(
-    prefix="/properties",
+    prefix="/api/properties",
     tags=["properties"], # Groups endpoints together in /docs
 )
 
