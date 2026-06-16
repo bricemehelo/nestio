@@ -13,7 +13,6 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 from app.repositories.property_repo import PropertyRepository
-from app.schemas.property import HTTPException
 
 from app.repositories.property_repo import PropertyRepository
 from app.schemas.property import PropertyCreate, PropertyUpdate, PropertyListResponse, PropertyResponse

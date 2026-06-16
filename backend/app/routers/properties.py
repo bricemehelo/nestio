@@ -11,7 +11,7 @@
 # which function handles which URL and HTTP method.
 
 from fastapi import APIRouter, Depends, Query
-from sqlachemy.orm import Session
+from sqlalchemy.orm import Session
 from typing import Optional
 
 from app.database import get_db
