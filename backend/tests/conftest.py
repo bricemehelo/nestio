@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine
-from sqlaclhemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 
 from app.main import app

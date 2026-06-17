@@ -26,14 +26,14 @@ class PropertyBase(BaseModel):
 
     # title — required, max 255 chars matches the DB column constraint
     # Field() lets us add validation rules and documentation
-    title: str = Field(..., max_length=255,description="Property listing title", example="Cozy 2-bedroom apartment in downtown") 
+    title: str = Field(..., max_length=255,description="Property listing title", json_schema_extra={"example": "Cozy 2-bedroom apartment in downtown"})
 
     # description — optional, no max length (TEXT in DB)
-    description: Optional[str] = Field(None, description="Detailed description of the property", example="This spacious apartment features hardwood floors, a modern kitchen, and a balcony with city views.")
+    description: Optional[str] = Field(None, description="Detailed description of the property", json_schema_extra={"example":"This spacious apartment features hardwood floors, a modern kitchen, and a balcony with city views."})
 
     # price — Decimal matches the Numeric(12,2) DB column
     # gt=0 means price must be greater than 0 — no free or negative properties
-    price: Decimal = Field(..., gt=0, description="Rental price per month", example=1500.00)
+    price: Decimal = Field(..., gt=0, description="Rental price per month", json_schema_extra={"example": 1500.00})
 
     # address — required, full street address
     address: str = Field(..., min_length=1, max_length=500, description="Full street address")
