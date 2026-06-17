@@ -28,7 +28,7 @@ test_engine = create_engine(TEST_DATABASE_URL)
 #create a session factory for tests
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def db():
     """
     Creates a fresh database session for each test function.
