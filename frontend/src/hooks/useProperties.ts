@@ -10,6 +10,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { propertiesApi } from "../api/properties";
 import type { PropertyFilters } from "../types/property";
+// Add this import at the top
+import { useAtomValue } from "jotai";
+import {
+  activeFiltersAtom,
+  selectedPropertyIdAtom,
+} from "../store/propertyAtoms";
 
 // Query key factory — centralises cache keys so invalidation is consistent
 // When we delete a property, we invalidate ['properties'] to refetch the list
@@ -51,4 +57,12 @@ export const useDeleteProperty = () => {
       queryClient.invalidateQueries({ queryKey: PROPERTY_KEYS.all });
     },
   });
+};
+
+// Add this hook at the bottom of the file
+// Connects Jotai filter state directly to React Query
+// When any filter atom changes, this automatically fires a new API call
+export const useFilteredProperties = () => {
+  const filters = useAtomValue(activeFiltersAtom);
+  return useProperties(filters);
 };
