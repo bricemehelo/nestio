@@ -59,7 +59,6 @@ export const useDeleteProperty = () => {
   });
 };
 
-// Add this hook at the bottom of the file
 // Connects Jotai filter state directly to React Query
 // When any filter atom changes, this automatically fires a new API call
 export const useFilteredProperties = () => {

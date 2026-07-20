@@ -14,7 +14,7 @@ import type {
   PropertyFilters,
   PropertyStatus,
   PropertyType,
-} from "../types/propertyTypes.ts";
+} from "../types/property";
 
 //Search term
 // Empty string means no search term is applied
