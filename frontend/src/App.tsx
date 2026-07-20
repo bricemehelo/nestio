@@ -1,11 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "./assets/vite.svg";
+import heroImg from "./assets/hero.png";
+import "./App.css";
+
+import PropertyCard from "./components/PropertyCard";
+
+const testProperty = {
+  id: 1,
+  title: "3 Bedroom Flat in Lekki",
+  description: "Spacious flat with ocean view",
+  price: "5000000.00",
+  address: "12 Admiralty Way, Lekki Phase 1",
+  city: "Lagos",
+  latitude: 6.4281,
+  longitude: 3.4219,
+  property_type: "apartment" as const,
+  status: "for_sale" as const,
+  created_at: "2026-06-16T08:27:40.326862+01:00",
+  updated_at: "2026-06-16T08:27:40.326862+01:00",
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
@@ -31,7 +48,9 @@ function App() {
       </section>
 
       <div className="ticks"></div>
-
+      <div style={{ padding: "20px", maxWidth: "400px" }}>
+        <PropertyCard property={testProperty} />
+      </div>
       <section id="next-steps">
         <div id="docs">
           <svg className="icon" role="presentation" aria-hidden="true">
@@ -116,7 +135,7 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -26,7 +26,7 @@ export type PropertyStatus =
 export interface Property {
   id: number;
   title: string;
-  price: number;
+  price: string;
   address: string;
   city: string;
   latitude: number;

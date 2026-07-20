@@ -14,8 +14,8 @@ import type { Property } from "../types/property";
 // Props interface - Typescript ensures the component receives the correct data shape
 
 interface PropertyCardProps {
-  property: Propery;
-  isSelected: boolean;
+  property: Property;
+  isSelected?: boolean;
 }
 
 // helper - formats price as readable currency string
@@ -76,32 +76,32 @@ const PropertyCard = ({ property, isSelected = false }: PropertyCardProps) => {
         📍 {property.address}, {property.city}
       </p>
       {/*  Type and Status */}
-      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
-        <span style={{
-             padding: '4px 8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          backgroundColor: '#E9ECEF',
-          color: '#495057',
-          textTransform: 'capitalize',
-        }}>
-            {property.property_type}
-
+      <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+        <span
+          style={{
+            padding: "4px 8px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            backgroundColor: "#E9ECEF",
+            color: "#495057",
+            textTransform: "capitalize",
+          }}
+        >
+          {property.property_type}
         </span>
         <span
-        style={{
-            padding: '4px 8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-         backgroundColor: property.status === 'for_sale' ? '#D8F3DC' : '#FFF3CD',
-          color: property.status === 'for_sale' ? '#2D6A4F' : '#856404',
-           
-        }}>
-            {formatStatus(property.status)}
+          style={{
+            padding: "4px 8px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            backgroundColor:
+              property.status === "for_sale" ? "#D8F3DC" : "#FFF3CD",
+            color: property.status === "for_sale" ? "#2D6A4F" : "#856404",
+          }}
+        >
+          {formatStatus(property.status)}
         </span>
-        
-        
-     </div>>
+      </div>
     </div>
   );
 };

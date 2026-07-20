@@ -39,7 +39,7 @@ export const maxPriceAtom = atom<number | null>(null);
 
 //Selected property ID atom - set when user clicks a map marker or property card to view details
 // null means no property is selected
-export const selectedPropertyIdAtom = atom<string | null>(null);
+export const selectedPropertyIdAtom = atom<number | null>(null);
 
 // Derived atom — combines all filter atoms into a single PropertyFilters object
 // React Query reads this atom to know what filters to apply to the API call
