@@ -7,6 +7,7 @@ import "./App.css";
 import PropertyCard from "./components/PropertyCard";
 import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
+import PropertyList from "./components/PropertyList";
 
 const testProperty = {
   id: 1,
@@ -54,6 +55,7 @@ function App() {
         <PropertyCard property={testProperty} />
         <SearchBar />
         <FilterPanel />
+        {/* <PropertyList /> */}
       </div>
       <section id="next-steps">
         <div id="docs">

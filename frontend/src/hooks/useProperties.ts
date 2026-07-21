@@ -13,7 +13,7 @@ import type { PropertyFilters } from "../types/property";
 // Add this import at the top
 import { useAtomValue } from "jotai";
 import {
-  activeFiltersAtom,
+  activeFilterAtom,
   selectedPropertyIdAtom,
 } from "../store/propertyAtoms";
 
@@ -62,6 +62,6 @@ export const useDeleteProperty = () => {
 // Connects Jotai filter state directly to React Query
 // When any filter atom changes, this automatically fires a new API call
 export const useFilteredProperties = () => {
-  const filters = useAtomValue(activeFiltersAtom);
+  const filters = useAtomValue(activeFilterAtom);
   return useProperties(filters);
 };
