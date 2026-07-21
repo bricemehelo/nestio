@@ -5,6 +5,7 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 
 import PropertyCard from "./components/PropertyCard";
+import SearchBar from "./components/SearchBar";
 
 const testProperty = {
   id: 1,
@@ -50,6 +51,8 @@ function App() {
       <div className="ticks"></div>
       <div style={{ padding: "20px", maxWidth: "400px" }}>
         <PropertyCard property={testProperty} />
+
+        <SearchBar />
       </div>
       <section id="next-steps">
         <div id="docs">
