@@ -4,59 +4,79 @@ import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
 
-import PropertyCard from "./components/PropertyCard";
+// src/App.tsx
+//
+// PURPOSE: Root component — assembles the full layout of the application.
+// Left panel: SearchBar + FilterPanel + PropertyList
+// Right panel: Map (MapLibre GL JS — next phase)
+
 import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
 import PropertyList from "./components/PropertyList";
 
-const testProperty = {
-  id: 1,
-  title: "3 Bedroom Flat in Lekki",
-  description: "Spacious flat with ocean view",
-  price: "5000000.00",
-  address: "12 Admiralty Way, Lekki Phase 1",
-  city: "Lagos",
-  latitude: 6.4281,
-  longitude: 3.4219,
-  property_type: "apartment" as const,
-  status: "for_sale" as const,
-  created_at: "2026-06-16T08:27:40.326862+01:00",
-  updated_at: "2026-06-16T08:27:40.326862+01:00",
-};
-
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <section id="center">
         <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
+          {/* <img src={heroImg} className="base" width="170" height="179" alt="" /> */}
           <img src={reactLogo} className="framework" alt="React logo" />
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
-          <h1>Get started</h1>
+          <h1> 🏠 Nestio</h1>
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
       </section>
 
       <div className="ticks"></div>
-      <div style={{ padding: "20px", maxWidth: "400px" }}>
-        <PropertyCard property={testProperty} />
-        <SearchBar />
-        <FilterPanel />
-        {/* <PropertyList /> */}
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
+        {/* Left Panel — Search, Filters, Property List */}
+        <div
+          style={{
+            width: "380px",
+            minWidth: "380px",
+
+            overflowY: "auto",
+            padding: "20px",
+            borderRight: "1px solid #DEE2E6",
+            backgroundColor: "#F8F9FA",
+          }}
+        >
+          <h1
+            style={{ margin: "0 0 20px 0", fontSize: "22px", color: "#1E1E2E" }}
+          >
+            🏠 Nestio
+          </h1>
+          <SearchBar />
+          <FilterPanel />
+          <PropertyList />
+        </div>
+
+        {/* Right Panel — Map placeholder for now */}
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: "#E9ECEF",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#6C757D",
+            fontSize: "18px",
+          }}
+        >
+          🗺️ Map coming next — MapLibre GL JS
+        </div>
       </div>
+      <section id="spacer"></section>
       <section id="next-steps">
         <div id="docs">
           <svg className="icon" role="presentation" aria-hidden="true">
@@ -137,9 +157,6 @@ function App() {
           </ul>
         </div>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
     </>
   );
 }
