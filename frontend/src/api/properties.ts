@@ -13,7 +13,6 @@ import type {
   PropertyFilters,
   PropertyListResponse,
 } from "../types/property";
-import { create } from "axios";
 
 export const propertiesApi = {
   // Fetch all properties with optional filters

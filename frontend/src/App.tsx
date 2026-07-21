@@ -26,7 +26,7 @@ function App() {
         <div>
           <h1> 🏠 Nestio</h1>
           <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+            Find the best Accomodation in the country <code>HMR</code>
           </p>
         </div>
       </section>
