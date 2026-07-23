@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
+import Map from "./components/Map"; // Replace the placeholder div
 
 // src/App.tsx
 //
@@ -73,6 +74,9 @@ function App() {
             fontSize: "18px",
           }}
         >
+          <div style={{ flex: 1, height: "100vh" }}>
+            <Map />
+          </div>
           🗺️ Map coming next — MapLibre GL JS
         </div>
       </div>
