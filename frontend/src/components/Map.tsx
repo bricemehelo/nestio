@@ -46,6 +46,15 @@ const Map = () => {
       zoom: 11,
     });
   });
+
+  // Add navigation controls , zomm in /ou button
+  map.current.addControl(new maplibre1.NavigationControl(), "top-right");
+
+  //Cleanup , destroy map instance when component unmounts
+  return () => {
+    map.current?.remove();
+    map.current = null;
+  };
 };
 
 export default Map;
