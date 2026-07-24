@@ -30,3 +30,56 @@ vi.mock("maplibre-gl", () => ({
     setHTML: vi.fn().mockReturnThis(),
   })),
 }));
+
+// Mock useFilteredProperties — no real API calls in tests
+vi.mock("../../hooks/useProperties", () => ({
+  useFilteredProperties: vi.fn().mockReturnValue({
+    data: {
+      total: 1,
+      properties: [
+        {
+          id: 1,
+          title: "3 Bedroom Flat in Lekki",
+          description: "Spacious flat",
+          price: "5000000.00",
+          address: "12 Admiralty Way",
+          city: "Lagos",
+          latitude: 6.4281,
+          longitude: 3.4219,
+          property_type: "apartment",
+          status: "for_sale",
+          created_at: "2026-06-16T08:27:40.326862+01:00",
+          updated_at: "2026-06-16T08:27:40.326862+01:00",
+        },
+      ],
+    },
+    isLoading: false,
+    error: null,
+  }),
+}));
+
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+
+const renderMap = () => {
+  const queryClient = createTestQueryClient();
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <Provider>
+        <Map />
+      </Provider>
+    </QueryClientProvider>,
+  );
+};
+
+describe("Map", () => {
+  test("renders the map container", () => {
+    const { container } = renderMap();
+
+    // The map container div should be present in the DOM
+    const mapDiv = container.querySelector("div");
+    expect(mapDiv).toBeInTheDocument();
+  });
+
