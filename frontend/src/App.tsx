@@ -77,7 +77,7 @@ function App() {
           <div style={{ flex: 1, height: "100vh" }}>
             <Map />
           </div>
-          🗺️ Map coming next — MapLibre GL JS
+          {/* 🗺️ Map coming next — MapLibre GL JS */}
         </div>
       </div>
       <section id="spacer"></section>

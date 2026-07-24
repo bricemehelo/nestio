@@ -9,7 +9,7 @@
 // to the selected property's coordinates when it changes.
 
 import { useEffect, useRef } from "react";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useAtom } from "jotai";
 import { selectedPropertyIdAtom } from "../store/propertyAtoms";
