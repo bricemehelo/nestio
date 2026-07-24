@@ -98,3 +98,14 @@ describe("Map", () => {
     expect(() => renderMap()).not.toThrow();
   });
 
+  test("renders without crashing during loading state", () => {
+    const { useFilteredProperties } = require("../../hooks/useProperties");
+    useFilteredProperties.mockReturnValueOnce({
+      data: undefined,
+      isLoading: true,
+      error: null,
+    });
+
+    expect(() => renderMap()).not.toThrow();
+  });
+});
