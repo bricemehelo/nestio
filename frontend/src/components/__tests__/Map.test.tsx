@@ -87,4 +87,14 @@ describe("Map", () => {
     expect(() => renderMap()).not.toThrow();
   });
 
- 
+  test("renders without crashing when no properties available", () => {
+    const { useFilteredProperties } = require("../../hooks/useProperties");
+    useFilteredProperties.mockReturnValueOnce({
+      data: { total: 0, properties: [] },
+      isLoading: false,
+      error: null,
+    });
+
+    expect(() => renderMap()).not.toThrow();
+  });
+
