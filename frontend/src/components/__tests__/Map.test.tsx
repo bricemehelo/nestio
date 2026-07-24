@@ -83,3 +83,8 @@ describe("Map", () => {
     expect(mapDiv).toBeInTheDocument();
   });
 
+  test("renders without crashing when properties are available", () => {
+    expect(() => renderMap()).not.toThrow();
+  });
+
+ 
