@@ -13,27 +13,40 @@ import { useFilteredProperties } from "../../hooks/useProperties";
 
 // Mock MapLibre entirely — WebGL is not available in jsdom test environment
 // We replace the real library with a lightweight fake that satisfies our component
-vi.mock("maplibre-gl", () => ({
-  Map: vi.fn().mockImplementation(() => ({
+vi.mock("maplibre-gl", () => {
+  const MapMock = vi.fn().mockImplementation(() => ({
     addControl: vi.fn(),
     remove: vi.fn(),
     flyTo: vi.fn(),
     on: vi.fn(),
-  })),
-  NavigationControl: vi.fn().mockImplementation(() => ({})),
-  Marker: vi.fn().mockImplementation(() => ({
+  }));
+
+  const NavigationControlMock = vi.fn().mockImplementation(() => ({}));
+
+  const MarkerMock = vi.fn().mockImplementation(() => ({
     setLngLat: vi.fn().mockReturnThis(),
     setPopup: vi.fn().mockReturnThis(),
     addTo: vi.fn().mockReturnThis(),
     remove: vi.fn(),
-  })),
-  Popup: vi.fn().mockImplementation(() => ({
-    setHTML: vi.fn().mockReturnThis(),
-  })),
-}));
+  }));
 
-// Mock MapLibre CSS — jsdom can't handle CSS imports
-vi.mock("maplibre-gl/dist/maplibre-gl.css", () => ({}));
+  const PopupMock = vi.fn().mockImplementation(() => ({
+    setHTML: vi.fn().mockReturnThis(),
+  }));
+
+  return {
+    default: {
+      Map: MapMock,
+      NavigationControl: NavigationControlMock,
+      Marker: MarkerMock,
+      Popup: PopupMock,
+    },
+    Map: MapMock,
+    NavigationControl: NavigationControlMock,
+    Marker: MarkerMock,
+    Popup: PopupMock,
+  };
+});
 
 // Mock useFilteredProperties — no real API calls in tests
 vi.mock("../../hooks/useProperties", () => ({
