@@ -32,6 +32,9 @@ vi.mock("maplibre-gl", () => ({
   })),
 }));
 
+// Mock MapLibre CSS — jsdom can't handle CSS imports
+vi.mock("maplibre-gl/dist/maplibre-gl.css", () => ({}));
+
 // Mock useFilteredProperties — no real API calls in tests
 vi.mock("../../hooks/useProperties", () => ({
   useFilteredProperties: vi.fn().mockReturnValue({
