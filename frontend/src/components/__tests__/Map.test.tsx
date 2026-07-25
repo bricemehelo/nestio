@@ -9,7 +9,7 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "jotai";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Map from "../Map";
-import { useFilteredProperties } from '../../hooks/useProperties'
+import { useFilteredProperties } from "../../hooks/useProperties";
 
 // Mock MapLibre entirely — WebGL is not available in jsdom test environment
 // We replace the real library with a lightweight fake that satisfies our component
@@ -88,24 +88,25 @@ describe("Map", () => {
     expect(() => renderMap()).not.toThrow();
   });
 
-// Replace the two failing tests with these:
+  // Replace the two failing tests with these:
 
-test('renders without crashing when no properties available', () => {
-  (useFilteredProperties as any).mockReturnValueOnce({
-    data: { total: 0, properties: [] },
-    isLoading: false,
-    error: null,
-  })
+  test("renders without crashing when no properties available", () => {
+    (useFilteredProperties as any).mockReturnValueOnce({
+      data: { total: 0, properties: [] },
+      isLoading: false,
+      error: null,
+    });
 
-  expect(() => renderMap()).not.toThrow()
-})
+    expect(() => renderMap()).not.toThrow();
+  });
 
-test('renders without crashing during loading state', () => {
-  (useFilteredProperties as any).mockReturnValueOnce({
-    data: undefined,
-    isLoading: true,
-    error: null,
-  })
+  test("renders without crashing during loading state", () => {
+    (useFilteredProperties as any).mockReturnValueOnce({
+      data: undefined,
+      isLoading: true,
+      error: null,
+    });
 
-  expect(() => renderMap()).not.toThrow()
-})
+    expect(() => renderMap()).not.toThrow();
+  });
+});
