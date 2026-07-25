@@ -5,14 +5,16 @@
 // We mock MapLibre entirely and test only our component's behaviour —
 // does it mount, does it react to selected property changes.
 
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Provider } from "jotai";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Map from "../Map";
 import { useFilteredProperties } from "../../hooks/useProperties";
 
+// Mock MapLibre CSS — jsdom can't handle CSS imports
+vi.mock("maplibre-gl/dist/maplibre-gl.css", () => ({}));
+
 // Mock MapLibre entirely — WebGL is not available in jsdom test environment
-// We replace the real library with a lightweight fake that satisfies our component
 vi.mock("maplibre-gl", () => {
   const MapMock = vi.fn().mockImplementation(() => ({
     addControl: vi.fn(),
@@ -34,13 +36,9 @@ vi.mock("maplibre-gl", () => {
     setHTML: vi.fn().mockReturnThis(),
   }));
 
+  // Must match namespace import structure: import * as maplibregl
+  // Every export must be at the top level — no default wrapper
   return {
-    default: {
-      Map: MapMock,
-      NavigationControl: NavigationControlMock,
-      Marker: MarkerMock,
-      Popup: PopupMock,
-    },
     Map: MapMock,
     NavigationControl: NavigationControlMock,
     Marker: MarkerMock,
@@ -94,8 +92,6 @@ const renderMap = () => {
 describe("Map", () => {
   test("renders the map container", () => {
     const { container } = renderMap();
-
-    // The map container div should be present in the DOM
     const mapDiv = container.querySelector("div");
     expect(mapDiv).toBeInTheDocument();
   });
@@ -103,8 +99,6 @@ describe("Map", () => {
   test("renders without crashing when properties are available", () => {
     expect(() => renderMap()).not.toThrow();
   });
-
-  // Replace the two failing tests with these:
 
   test("renders without crashing when no properties available", () => {
     (useFilteredProperties as any).mockReturnValueOnce({
