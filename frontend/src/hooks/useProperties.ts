@@ -12,10 +12,7 @@ import { propertiesApi } from "../api/properties";
 import type { PropertyFilters } from "../types/property";
 // Add this import at the top
 import { useAtomValue } from "jotai";
-import {
-  activeFilterAtom,
-  selectedPropertyIdAtom,
-} from "../store/propertyAtoms";
+import { activeFilterAtom } from "../store/propertyAtoms";
 
 // Query key factory — centralises cache keys so invalidation is consistent
 // When we delete a property, we invalidate ['properties'] to refetch the list
