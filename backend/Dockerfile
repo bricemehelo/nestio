@@ -20,7 +20,7 @@ COPY requirements.txt .
 
 # Install dependencies
 # --no-cache-dir reduces image size by not storing the pip download cache
-RUN pip install --no-cahe-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
