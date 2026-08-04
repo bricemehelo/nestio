@@ -41,7 +41,7 @@ const Map = () => {
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       // Free tile provider — no API key needed
-      style: "https://tiles.openfreemap.org/styles/liberty",
+      style: `https://api.maptiler.com/maps/streets/style.json?key=${import.meta.env.VITE_MAPTILER_API_KEY}`,
       center: [3.3792, 6.5244], // Lagos coordinates [longitude, latitude]
       zoom: 11,
     });

@@ -11,7 +11,7 @@
 # ── Stage 1: Build ────────────────────────────────────────────────────────────
 FROM node:20-slim AS builder
 
-WORDIR /app
+WORKDIR /app
 
 # Copy package files first for layer caching
 COPY package*.json
