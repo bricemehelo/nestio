@@ -14,7 +14,7 @@ FROM node:20-slim AS builder
 WORKDIR /app
 
 # Copy package files first for layer caching
-COPY package*.json
+COPY package*.json .
 
 # Install all dependencies including devDependencies needed for the build
 RUN npm ci
@@ -23,7 +23,7 @@ RUN npm ci
 COPY . .
 
 # Build the production bundle — outputs to /app/dist
-RUN npm dun build
+RUN npm run build
 
 # ── Stage 2: Serve ────────────────────────────────────────────────────────────
 FROM nginx:alpine
