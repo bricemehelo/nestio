@@ -38,19 +38,55 @@ const Map = () => {
   useEffect(() => {
     if (map.current || !mapContainer.current) return;
 
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      // Free tile provider — no API key needed
-      style: `https://api.maptiler.com/maps/streets/style.json?key=${import.meta.env.VITE_MAPTILER_API_KEY}`,
-      center: [3.3792, 6.5244], // Lagos coordinates [longitude, latitude]
-      zoom: 11,
-    });
+    // Small delay to ensure the container has a rendered height before MapLibre initialises
+    const timeout = setTimeout(() => {
+      console.log("Container:", mapContainer.current);
+      console.log("Container height:", mapContainer.current?.clientHeight);
 
-    // Add navigation controls — zoom in/out buttons
-    map.current.addControl(new maplibregl.NavigationControl(), "top-right");
+      if (!mapContainer.current) {
+        console.log("Container is null — map cannot initialise");
+        return;
+      }
 
-    // Cleanup — destroy map instance when component unmounts
+      map.current = new maplibregl.Map({
+        container: mapContainer.current!,
+        style: {
+          version: 8,
+          sources: {
+            "raster-tiles": {
+              type: "raster",
+              tiles: [
+                `https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${import.meta.env.VITE_MAPTILER_API_KEY}`,
+              ],
+              tileSize: 256,
+            },
+          },
+          layers: [
+            {
+              id: "raster-layer",
+              type: "raster",
+              source: "raster-tiles",
+            },
+          ],
+        },
+        center: [3.3792, 6.5244],
+        zoom: 11,
+      });
+
+      map.current.on("load", () => {
+        console.log("Map loaded successfully");
+        console.log(
+          "Map size:",
+          map.current?.getCanvas().width,
+          map.current?.getCanvas().height,
+        );
+      });
+
+      map.current.addControl(new maplibregl.NavigationControl(), "top-right");
+    }, 100);
+
     return () => {
+      clearTimeout(timeout);
       map.current?.remove();
       map.current = null;
     };
