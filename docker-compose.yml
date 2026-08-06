@@ -50,10 +50,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8000
+        VITE_MAPTILER_API_KEY: jX2ycIJwZPzqSJSKkJQH
     container_name: nestio_frontend
-    environment:
-      VITE_API_URL: http://localhost:8000
-      VITE_MAPTILER_API_KEY: jX2ycIJwZPzqSJSKkJQH
     ports:
       - "5173:80" # Map Nginx port 80 to 5173 to match our dev URL
     depends_on:
