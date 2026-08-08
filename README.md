@@ -272,3 +272,5 @@ Docker implemented
 fix map
 preparing for CI/CD
 preparing for AI integration
+
+Note: consider applying this to portharcourt as case study
