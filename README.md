@@ -4,6 +4,14 @@ A full stack property listings map application built with FastAPI, PostgreSQL, R
 
 Built as a portfolio project to demonstrate proficiency in modern backend and frontend engineering patterns, testing, and DevOps practices.
 
+## Author
+
+**Brice Mehelo** — Senior Full Stack Engineer & SaaS Founder
+
+GitHub: [github.com/bricemehelo](https://github.com/bricemehelo)
+
+> "Teams and products that scale are built on standards — not quick fixes."
+
 ---
 
 ## What It Does
@@ -260,13 +268,21 @@ npm run test
 
 ---
 
-## Author
+# Terminal 1 — Backend
 
-**Brice Mehelo** — Senior Full Stack Engineer & SaaS Founder
+cd ~/Projects/2026/nestio/backend
+source venv/bin/activate
+uvicorn app.main:app --reload
 
-GitHub: [github.com/bricemehelo](https://github.com/bricemehelo)
+# Terminal 2 — Frontend
 
-> "Teams and products that scale are built on standards — not quick fixes."
+cd ~/Projects/2026/nestio/frontend
+nvm use 20
+npm run dev
+
+# Confirm PostgreSQL is running
+
+brew services start postgresql@15
 
 Docker implemented
 fix map

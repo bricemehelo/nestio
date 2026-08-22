@@ -1,0 +1,20 @@
+# .github/workflows/ci.yml
+#
+# PURPOSE: Runs automated tests on every push and pull request to main.
+# If any test fails, the pipeline fails — protecting the main branch
+# from broken code being merged or deployed.
+#
+# Two jobs run in parallel:
+# - backend: runs pytest tests against a real PostgreSQL database
+# - frontend: runs Vitest component tests
+
+name: Nestio CI
+# Trigger on every push and pull request to main branch
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Backend Tests ────────────────────────────────────────────────────────────
