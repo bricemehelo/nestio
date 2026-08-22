@@ -38,3 +38,23 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+    steps:
+      # Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Python 3.13
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # Cache pip dependencies — speeds up subsequent runs
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
