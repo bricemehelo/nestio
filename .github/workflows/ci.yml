@@ -16,7 +16,7 @@ on:
     branches: [main]
 
 jobs:
-  # ── Backend Tests ────────────────────────────────────────────────────────────
+  #── Backend Tests ────────────────────────────────────────────────────────────
   backend:
     name: Backend Tests
     runs-on: ubuntu-latest
