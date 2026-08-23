@@ -96,7 +96,10 @@ def health():
 
 @app.on_event("startup")
 def run_migrations():
-    # Only run migrations if DATABASE_URL is set — skips local dev if needed
+    # Skip migrations during testing — conftest.py handles table creation
+    if os.getenv("TESTING") == "true":
+        return
+    
     if os.getenv("DATABASE_URL"):
         alembic_cfg = Config("alembic.ini")
         command.upgrade(alembic_cfg, "head")
