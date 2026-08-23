@@ -9,6 +9,9 @@
 # FastAPI is the web framework — handles HTTP requests and responses
 from fastapi import FastAPI
 from app.routers import properties
+from alembic.config import Config
+from alembic import command
+import os
 
 
 # CORSMiddleware allows our React frontend (on a different port)
@@ -90,3 +93,10 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
+@app.on_event("startup")
+def run_migrations():
+    # Only run migrations if DATABASE_URL is set — skips local dev if needed
+    if os.getenv("DATABASE_URL"):
+        alembic_cfg = Config("alembic.ini")
+        command.upgrade(alembic_cfg, "head")
