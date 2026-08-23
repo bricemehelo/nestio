@@ -12,7 +12,7 @@ import axios from "axios";
 // In development this is localhost:8000
 // In production this will be the Railway URL via environment variable
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const BASE_URL = "https://nestio-ge54.onrender.com";
 
 // Create a typed Axios instance with the base URL and default headers
 
