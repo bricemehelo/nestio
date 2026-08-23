@@ -40,7 +40,10 @@ app.add_middleware(
 
     # The exact origin of our React frontend dev server
     # In production this will be replaced with your real domain
-    allow_origins=["http://localhost:5173"],
+     allow_origins=[
+        "http://localhost:5173",
+        "https://nestio-lime.vercel.app",  # add this
+    ],
 
     # Allows cookies and auth headers to be sent cross-origin
     allow_credentials=True,
