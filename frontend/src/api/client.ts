@@ -13,7 +13,6 @@ import axios from "axios";
 // In production this will be the Railway URL via environment variable
 
 const BASE_URL = "https://nestio-ge54.onrender.com";
-
 // Create a typed Axios instance with the base URL and default headers
 
 export const apiClient = axios.create({
