@@ -83,6 +83,24 @@ const Map = () => {
       });
 
       map.current.addControl(new maplibregl.NavigationControl(), "top-right");
+
+      map.current.on("error", (e) => {
+        if (e.error?.message?.includes("WebGL2")) {
+          const container = mapContainer.current;
+          if (container) {
+            container.innerHTML = `
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f8f9fa;flex-direction:column;gap:12px;padding:24px;text-align:center;">
+              <span style="font-size:48px;">🗺️</span>
+              <strong style="font-size:16px;">Map unavailable</strong>
+              <p style="color:#6c757d;font-size:14px;margin:0;">
+                Your browser doesn't support WebGL2 which is required to render the map.
+                Try Chrome or Firefox with hardware acceleration enabled.
+              </p>
+            </div>
+          `;
+          }
+        }
+      });
     }, 100);
 
     return () => {
