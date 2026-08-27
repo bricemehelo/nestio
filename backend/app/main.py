@@ -76,27 +76,6 @@ def root():
 def health():
     return {"status": "healthy"}
 
-# ── Root route ───────────────────────────────────────────────
-# A simple GET endpoint at the root URL: http://localhost:8000/
-# Used to confirm the API is alive.
-# The @app.get("/") is the Decorator pattern in action —
-# it adds HTTP GET behaviour to the function below it
-# without changing the function itself.
-@app.get("/")
-def root():
-    # FastAPI automatically converts this dict to a JSON response
-    return {"message": "Nestio API is running"}
-
-
-# ── Health check route ───────────────────────────────────────
-# Industry standard endpoint: http://localhost:8000/health
-# Used by Docker, AWS, and monitoring tools to check if the
-# service is alive. Returns 200 OK with a status message.
-# You will see this in every production backend.
-@app.get("/health")
-def health():
-    return {"status": "healthy"}
-
 @app.on_event("startup")
 def run_migrations():
     # Skip migrations during testing — conftest.py handles table creation
