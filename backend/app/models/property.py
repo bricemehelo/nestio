@@ -1,6 +1,6 @@
 # app/models/property.py
 # This file contains the Property model, which represents a real estate property in the application.
-from sqlalchemy import Column, Integer, String, Text, Numeric, Float, DateTime
+from sqlalchemy import Column, Integer, String, Text, Numeric, Float, DateTime, Boolean
 from sqlalchemy.sql import func
 
 # Import Base from database.py — every model must inherit from this
@@ -11,7 +11,29 @@ from app.database import Base
 class Property(Base):
     __tablename__ = "properties"
 
-    
+    # --- AI Aggregator & Verification Fields ---
+    # These fields support the AI-powered listing aggregator feature.
+    # When Gemini finds properties via web search, they are saved here
+    # as unverified listings. The community then verifies or flags them.
+
+    # Where the listing was found — e.g. propertypro.ng, jiji.ng
+    source_url = Column(String, nullable=True)
+
+    # How the listing was created — "manual", "web_search", or "agent"
+    source = Column(String, nullable=False, server_default="manual")
+
+    # Whether the listing has been verified by the community
+    verified = Column(Boolean, nullable=False, server_default="false")
+
+    # How many users confirmed this listing is still available
+    verification_count = Column(Integer, nullable=False, server_default="0")
+
+    # How many users reported this listing as outdated or sold
+    outdated_count = Column(Integer, nullable=False, server_default="0")
+
+    # Last time a user verified this listing
+    last_verified_at = Column(DateTime, nullable=True)
+
     # --- Identity ---
     # Primary key — auto-incremented by PostgreSQL
     # index=True adds a DB index for faster lookups by ID
@@ -66,6 +88,9 @@ class Property(Base):
     # updated_at — automatically updated every time the row changes
     # onupdate=func.now() tells SQLAlchemy to refresh this on every UPDATE
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+    
 
     def __repr__(self):
         # __repr__ gives a readable string when you print a Property instance
