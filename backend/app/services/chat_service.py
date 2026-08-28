@@ -100,4 +100,16 @@ tools = [
 ]
 
 
+class ChatService:
+    """
+    Handles AI-powered property search using Google Gemini.
+    
+    Flow:
+    1. User sends a natural language message
+    2. Gemini decides to call search_properties tool
+    3. We execute the search against PostgreSQL
+    4. If results are insufficient, Gemini calls save_unverified_property
+    5. We save new listings and return a combined response
+    """
+
 
