@@ -112,4 +112,25 @@ class ChatService:
     5. We save new listings and return a combined response
     """
 
+     def __init__(self, db: Session):
+        # Database session injected by FastAPI dependency injection
+        self.db = db
+        self.repo = PropertyRepository(db)
+        
+        # Initialise Gemini model with tool use enabled
+        # gemini-1.5-flash is fast and free tier friendly
+        self.model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            tools=tools,
+            system_instruction=(
+                "You are Nestio AI, a helpful property search assistant for Nigerian real estate. "
+                "You help users find properties in Lagos, Port Harcourt, Abuja and other Nigerian cities. "
+                "Always search the database first using search_properties. "
+                "If you find fewer than 3 results, mention that data is limited "
+                "and describe what properties you did find. "
+                "Be conversational, helpful, and specific about Nigerian locations. "
+                "Format prices in Naira (₦) with proper formatting e.g. ₦85,000,000. "
+                "Always mention the neighbourhood, not just the city."
+            )
+        )
 
