@@ -182,3 +182,42 @@ class ChatService:
             "properties": formatted
         })
 
+    def _execute_save_unverified_property(self, args: dict) -> str:
+        """
+        Execute the save_unverified_property tool call.
+        Saves a web-found property to our DB as unverified.
+        """
+        try:
+            # Create new property marked as unverified and sourced from web search
+            new_property = Property(
+                title=args.get("title", "Untitled Property"),
+                description=args.get("description", ""),
+                price=args.get("price", 0),
+                address=args.get("address", ""),
+                city=args.get("city", ""),
+                # Default coordinates for Lagos if not provided
+                latitude=args.get("latitude", 6.5244),
+                longitude=args.get("longitude", 3.3792),
+                property_type=args.get("property_type", "apartment"),
+                status=args.get("status", "for_sale"),
+                # Verification fields — unverified by default
+                source_url=args.get("source_url", ""),
+                source="web_search",
+                verified=False,
+                verification_count=0,
+                outdated_count=0,
+            )
+
+            self.db.add(new_property)
+            self.db.commit()
+            self.db.refresh(new_property)
+
+            return json.dumps({
+                "saved": True,
+                "property_id": new_property.id,
+                "message": f"Saved '{new_property.title}' as unverified listing."
+            })
+
+        except Exception as e:
+            self.db.rollback()
+            return json.dumps({"saved": False, "error": str(e)})
