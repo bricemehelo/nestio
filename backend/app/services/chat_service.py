@@ -112,7 +112,7 @@ class ChatService:
     5. We save new listings and return a combined response
     """
 
-     def __init__(self, db: Session):
+    def __init__(self, db: Session):
         # Database session injected by FastAPI dependency injection
         self.db = db
         self.repo = PropertyRepository(db)
@@ -133,4 +133,52 @@ class ChatService:
                 "Always mention the neighbourhood, not just the city."
             )
         )
+
+
+    def _execute_search_properties(self, args: dict) -> str:
+        """
+        Execute the search_properties tool call against PostgreSQL.
+        Returns results as a JSON string for Gemini to read.
+        """
+        # Call our existing repository with the args Gemini extracted
+        results = self.repo.get_all(
+            db=self.db,
+            city=args.get("city"),
+            property_type=args.get("property_type"),
+            status=args.get("status"),
+            search=args.get("search"),
+            min_price=args.get("min_price"),
+            max_price=args.get("max_price"),
+            skip=0,
+            limit=10
+        )
+
+        properties = results["properties"]
+
+        if not properties:
+            return json.dumps({
+                "found": 0,
+                "message": "No properties found in database matching these criteria.",
+                "properties": []
+            })
+
+        # Format properties for Gemini to read
+        formatted = []
+        for p in properties:
+            formatted.append({
+                "id": p.id,
+                "title": p.title,
+                "price": float(p.price),
+                "address": p.address,
+                "city": p.city,
+                "property_type": p.property_type,
+                "status": p.status,
+                "verified": p.verified,
+                "description": p.description[:200] if p.description else ""
+            })
+
+        return json.dumps({
+            "found": len(formatted),
+            "properties": formatted
+        })
 
