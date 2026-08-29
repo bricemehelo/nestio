@@ -221,3 +221,88 @@ class ChatService:
         except Exception as e:
             self.db.rollback()
             return json.dumps({"saved": False, "error": str(e)})
+    def chat(self, message: str) -> dict:
+        """
+        Main entry point — process a user message and return AI response.
+        
+        Args:
+            message: Natural language property search query from user
+            
+        Returns:
+            dict with 'response' (AI text) and 'properties' (any found listings)
+        """
+        # Start a chat session with Gemini
+        chat_session = self.model.start_chat()
+
+        # Send user message to Gemini
+        response = chat_session.send_message(message)
+
+        # Track properties found during this conversation
+        found_properties = []
+
+        # ── Tool Use Loop ─────────────────────────────────────
+        # Gemini may call multiple tools in sequence.
+        # We loop until Gemini stops calling tools and gives a final text response.
+        max_iterations = 5  # prevent infinite loops
+        iteration = 0
+
+        while iteration < max_iterations:
+            iteration += 1
+            tool_calls_made = False
+
+            # Check if Gemini wants to call any tools
+            for candidate in response.candidates:
+                for part in candidate.content.parts:
+                    if hasattr(part, 'function_call') and part.function_call.name:
+                        tool_calls_made = True
+                        tool_name = part.function_call.name
+                        tool_args = dict(part.function_call.args)
+
+                        # Execute the tool Gemini requested
+                        if tool_name == "search_properties":
+                            tool_result = self._execute_search_properties(tool_args)
+                            
+                            # Track found properties for the frontend
+                            result_data = json.loads(tool_result)
+                            if result_data.get("properties"):
+                                found_properties.extend(result_data["properties"])
+
+                        elif tool_name == "save_unverified_property":
+                            tool_result = self._execute_save_unverified_property(tool_args)
+
+                        else:
+                            tool_result = json.dumps({"error": f"Unknown tool: {tool_name}"})
+
+                        # Send tool result back to Gemini so it can continue
+                        response = chat_session.send_message(
+                            genai.protos.Content(
+                                parts=[genai.protos.Part(
+                                    function_response=genai.protos.FunctionResponse(
+                                        name=tool_name,
+                                        response={"result": tool_result}
+                                    )
+                                )],
+                                role="user"
+                            )
+                        )
+
+            # If no tool calls were made, Gemini has finished — extract text response
+            if not tool_calls_made:
+                final_text = ""
+                for candidate in response.candidates:
+                    for part in candidate.content.parts:
+                        if hasattr(part, 'text'):
+                            final_text += part.text
+
+                return {
+                    "response": final_text,
+                    "properties_found": len(found_properties),
+                    "properties": found_properties
+                }
+
+        # Fallback if max iterations reached
+        return {
+            "response": "I searched for properties but couldn't complete the request. Please try again.",
+            "properties_found": 0,
+            "properties": []
+        }
