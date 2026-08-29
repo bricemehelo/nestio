@@ -221,6 +221,7 @@ class ChatService:
         except Exception as e:
             self.db.rollback()
             return json.dumps({"saved": False, "error": str(e)})
+        
     def chat(self, message: str) -> dict:
         """
         Main entry point — process a user message and return AI response.
