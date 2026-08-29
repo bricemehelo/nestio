@@ -6,7 +6,7 @@
 // Full map integration is verified manually in the browser.
 //
 // NOTE: For complete map testing, use Playwright or Cypress E2E tests
-// which run in a real browser with WebGL support — a future addition.
+// which run in a real browser with WebGL support a future addition.
 
 import Map from "../Map";
 
