@@ -16,6 +16,9 @@ from sqlalchemy.orm import Session
 from app.repositories.property_repo import PropertyRepository
 from app.models.property import Property
 from datetime import datetime
+from googleapiclient.discovery import build
+
+#Google Search API configuration
 
 # Configure Gemini with our API key from .env
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -134,6 +137,17 @@ class ChatService:
             )
         )
 
+    def _search_web(self, query: str) -> list:
+        """
+        Search Nigerian property sites using Google Custom Search API.
+        Returns a list of raw search results for Gemini to process.
+        
+        Args:
+            query: Search query e.g. "3 bedroom apartment Lekki Lagos for rent"
+            
+        Returns:
+            List of search results with title, link, and snippet
+        """
 
     def _execute_search_properties(self, args: dict) -> str:
         """
