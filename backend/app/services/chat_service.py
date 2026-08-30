@@ -149,6 +149,17 @@ class ChatService:
             List of search results with title, link, and snippet
         """
 
+        try:
+            # Build the Google Custom Search service
+            service = build(
+                "customsearch",
+                "v1",
+                developerKey=os.getenv("GOOGLE_SEARCH_API_KEY")
+            )
+        except Exception as e:
+
+
+
     def _execute_search_properties(self, args: dict) -> str:
         """
         Execute the search_properties tool call against PostgreSQL.
