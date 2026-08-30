@@ -156,6 +156,14 @@ class ChatService:
                 "v1",
                 developerKey=os.getenv("GOOGLE_SEARCH_API_KEY")
             )
+
+            # Execute the search against our Nigerian property sites
+            results = service.cse().list(
+                q=query,
+                cx=os.getenv("GOOGLE_SEARCH_ENGINE_ID"),
+                num=5  # Return top 5 results
+            ).execute()
+
         except Exception as e:
 
 
