@@ -164,6 +164,18 @@ class ChatService:
                 num=5  # Return top 5 results
             ).execute()
 
+            # Extract relevant fields from results
+            items = results.get("items", [])
+            formatted = []
+            for item in items:
+                formatted.append({
+                    "title": item.get("title", ""),
+                    "link": item.get("link", ""),
+                    "snippet": item.get("snippet", ""),
+                })
+
+            return formatted
+        
         except Exception as e:
 
 
