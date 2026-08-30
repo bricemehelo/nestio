@@ -177,8 +177,8 @@ class ChatService:
             return formatted
         
         except Exception as e:
-
-
+            print(f"Web search error: {e}")
+        return []
 
     def _execute_search_properties(self, args: dict) -> str:
         """
