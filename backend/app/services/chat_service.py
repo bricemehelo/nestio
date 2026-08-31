@@ -97,7 +97,26 @@ tools = [
                     },
                     "required": ["title", "price", "city", "property_type", "status"]
                 }
-            }
+            },
+            {
+                "name": "search_web",
+                "description": (
+                    "Search Nigerian property websites for listings when the database "
+                    "doesn't have enough results. Use this after search_properties returns "
+                    "fewer than 3 results. Searches PropertyPro, Nigeria Property Centre, "
+                    "Jiji and other Nigerian property sites."
+                ),
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "Search query e.g. '3 bedroom apartment Lekki Lagos for rent site:propertypro.ng'"
+                        }
+                    },
+                    "required": ["query"]
+                }
+            },
         ]
     }
 ]
