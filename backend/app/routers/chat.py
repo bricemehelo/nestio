@@ -27,5 +27,8 @@ class ChatResponse(BaseModel):
     properties_found: int #Number of properties found in the search
     properties: list #List of property details (could be empty if none found)
 
+# ── POST /api/chat/ ──────────────────────────────────────────
+# Recieve a user message, pass it to ChatService, return the AI response
+#@router.post("/", response_model=ChatResponse)
 
 
