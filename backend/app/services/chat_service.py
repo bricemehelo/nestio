@@ -335,6 +335,18 @@ class ChatService:
                         elif tool_name == "save_unverified_property":
                             tool_result = self._execute_save_unverified_property(tool_args)
 
+                        elif tool_name == "search_web":
+                            # Execute real web search against Nigerian property sites
+                            web_results = self._search_web(tool_args.get("query", ""))
+                            tool_result = json.dumps({
+                                "results_found": len(web_results),
+                                "results": web_results,
+                                "instruction": (
+                                    "For each relevant result, call save_unverified_property "
+                                    "to save it to the database before responding to the user."
+                                )
+                            })
+
                         else:
                             tool_result = json.dumps({"error": f"Unknown tool: {tool_name}"})
 
