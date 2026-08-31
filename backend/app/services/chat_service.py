@@ -4,7 +4,11 @@
 # Uses Google Gemini with tool use to:
 # 1. Search our PostgreSQL database for matching properties
 # 2. Fall back to web search if DB results are insufficient
-# 3. Auto-save web-found properties as unverified listings
+# 3. Let Gemini identify useful web-found properties
+# 4. Save those web-found properties as unverified listings
+#
+# FLOW:
+# Database search → Web search (if needed) → Save web properties → Final response
 #
 # PATTERN: Service layer — business logic only, no HTTP concerns.
 # The router calls this service, this service calls the repository.
@@ -18,8 +22,7 @@ from app.models.property import Property
 from datetime import datetime
 from googleapiclient.discovery import build
 
-#Google Search API configuration
-
+ 
 # Configure Gemini with our API key from .env
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
