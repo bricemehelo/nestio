@@ -14,5 +14,18 @@ from app.services.chat_service import ChatService
 
 # ── Router setup ─────────────────────────────────────────────
 # prefix="/api/chat" means all routes here start with /api/chat
+router = APIRouter(prefix="/api/chat", tags=["chat"])
+
+# ── Request schema ───────────────────────────────────────────
+# Pydantic model for the incoming request body
+class ChatRequest(BaseModel):
+    message: str #The user's natural language message to the AI
+
+# ── Response schema ──────────────────────────────────────────
+class ChatResponse(BaseModel):
+    response: str #The AI-generated response to the user's message
+    properties_found: int #Number of properties found in the search
+    properties: list #List of property details (could be empty if none found)
+
 
 
