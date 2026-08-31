@@ -131,10 +131,13 @@ class ChatService:
     
     Flow:
     1. User sends a natural language message
-    2. Gemini decides to call search_properties tool
-    3. We execute the search against PostgreSQL
-    4. If results are insufficient, Gemini calls save_unverified_property
-    5. We save new listings and return a combined response
+    2. Gemini calls search_properties to search PostgreSQL
+    3. We execute the database search and return results to Gemini
+    4. If fewer than 3 results are found, Gemini calls search_web
+    5. We execute the web search and return the results to Gemini
+    6. Gemini identifies relevant web properties and calls save_unverified_property
+    7. We save those properties as unverified listings
+    8. Gemini generates the final response
     """
 
     def __init__(self, db: Session):
