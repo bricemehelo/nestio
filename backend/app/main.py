@@ -8,7 +8,7 @@
 
 # FastAPI is the web framework — handles HTTP requests and responses
 from fastapi import FastAPI
-from app.routers import properties
+from app.routers import properties , chat
 from alembic.config import Config
 from alembic import command
 import os
