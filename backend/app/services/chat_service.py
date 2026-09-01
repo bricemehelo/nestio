@@ -25,8 +25,7 @@ from googleapiclient.discovery import build
 
  
 # Configure Gemini with our API key from .env
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
+ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 # Configure Gemini with our API key from .env
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
