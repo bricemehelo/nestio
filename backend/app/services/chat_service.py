@@ -288,6 +288,124 @@ class ChatService:
         
     def chat(self, message: str) -> dict:
         """
+        Process a user message and return AI response.
+
+        Args:
+            message: Natural language property search query
+
+        Returns:
+            dict with response text and found properties
+        """
+        system_instruction = (
+            "You are Nestio AI, a helpful property search assistant for Nigerian real estate. "
+            "You help users find properties in Lagos, Port Harcourt, Abuja and other Nigerian cities. "
+            "Always search the database first using search_properties. "
+            "If fewer than 3 results are found, use search_web to find more properties online. "
+            "For any relevant web results, call save_unverified_property to save them. "
+            "Be conversational and specific about Nigerian locations. "
+            "Format prices in Naira (₦) e.g. ₦85,000,000."
+        )
+
+        # Build conversation history
+        contents = [
+            types.Content(
+                role="user",
+                parts=[types.Part(text=message)]
+            )
+        ]
+
+        found_properties = []
+        max_iterations = 10
+        iteration = 0
+
+        while iteration < max_iterations:
+            iteration += 1
+
+            # Send message to Gemini
+            response = client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=contents,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction,
+                    tools=tools,
+                )
+            )
+
+            # Add Gemini's response to conversation history
+            contents.append(
+                types.Content(
+                    role="model",
+                    parts=response.candidates[0].content.parts
+                )
+            )
+
+            # Check if Gemini wants to call any tools
+            tool_calls_made = False
+            tool_results = []
+
+            for part in response.candidates[0].content.parts:
+                if hasattr(part, 'function_call') and part.function_call:
+                    tool_calls_made = True
+                    tool_name = part.function_call.name
+                    tool_args = dict(part.function_call.args)
+
+                    # Execute the requested tool
+                    if tool_name == "search_properties":
+                        tool_result = self._execute_search_properties(tool_args)
+                        result_data = json.loads(tool_result)
+                        if result_data.get("properties"):
+                            found_properties.extend(result_data["properties"])
+
+                    elif tool_name == "search_web":
+                        tool_result = self._execute_search_web(
+                            tool_args.get("query", "")
+                        )
+
+                    elif tool_name == "save_unverified_property":
+                        tool_result = self._execute_save_unverified_property(tool_args)
+
+                    else:
+                        tool_result = json.dumps({"error": f"Unknown tool: {tool_name}"})
+
+                    # Collect tool result
+                    tool_results.append(
+                        types.Part(
+                            function_response=types.FunctionResponse(
+                                name=tool_name,
+                                response={"result": tool_result}
+                            )
+                        )
+                    )
+
+            # Send all tool results back to Gemini in one message
+            if tool_calls_made and tool_results:
+                contents.append(
+                    types.Content(
+                        role="user",
+                        parts=tool_results
+                    )
+                )
+                continue
+
+            # No tool calls — Gemini has finished, extract final text
+            final_text = ""
+            for part in response.candidates[0].content.parts:
+                if hasattr(part, 'text') and part.text:
+                    final_text += part.text
+
+            return {
+                "response": final_text,
+                "properties_found": len(found_properties),
+                "properties": found_properties
+            }
+
+        return {
+            "response": "I could not complete the search. Please try again.",
+            "properties_found": 0,
+            "properties": []
+        }
+    
+        """
         Main entry point — process a user message and return AI response.
         
         Args:
