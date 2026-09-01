@@ -35,95 +35,89 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 # Gemini reads these definitions and decides when to call them.
 
 tools = [
-    {
-        "function_declarations": [
-            {
-                # Tool 1: Search our PostgreSQL database
-                "name": "search_properties",
-                "description": (
+    types.Tool(
+        function_declarations=[
+            types.FunctionDeclaration(
+                name="search_properties",
+                description=(
                     "Search the Nestio property database for listings in Nigerian cities. "
-                    "Use this first before searching the web. "
+                    "Always use this tool first before searching the web. "
                     "Returns matching properties with price, location, and details."
                 ),
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "city": {
-                            "type": "string",
-                            "description": "City name e.g. Lagos, Port Harcourt, Abuja"
-                        },
-                        "property_type": {
-                            "type": "string",
-                            "description": "Type of property: apartment, house, land, commercial"
-                        },
-                        "max_price": {
-                            "type": "number",
-                            "description": "Maximum price in Naira"
-                        },
-                        "min_price": {
-                            "type": "number",
-                            "description": "Minimum price in Naira"
-                        },
-                        "status": {
-                            "type": "string",
-                            "description": "for_sale or for_rent"
-                        },
-                        "search": {
-                            "type": "string",
-                            "description": "Keyword search e.g. Lekki, Ikoyi, quiet, gated"
-                        }
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={
+                        "city": types.Schema(
+                            type=types.Type.STRING,
+                            description="City name e.g. Lagos, Port Harcourt, Abuja"
+                        ),
+                        "property_type": types.Schema(
+                            type=types.Type.STRING,
+                            description="Type: apartment, house, land, commercial"
+                        ),
+                        "max_price": types.Schema(
+                            type=types.Type.NUMBER,
+                            description="Maximum price in Naira"
+                        ),
+                        "min_price": types.Schema(
+                            type=types.Type.NUMBER,
+                            description="Minimum price in Naira"
+                        ),
+                        "status": types.Schema(
+                            type=types.Type.STRING,
+                            description="for_sale or for_rent"
+                        ),
+                        "search": types.Schema(
+                            type=types.Type.STRING,
+                            description="Keyword search e.g. Lekki, Ikoyi, quiet, gated"
+                        ),
                     },
-                    "required": []
-                }
-            },
-            {
-                # Tool 2: Save a web-found property to our DB as unverified
-                "name": "save_unverified_property",
-                "description": (
+                    required=[]
+                )
+            ),
+            types.FunctionDeclaration(
+                name="search_web",
+                description=(
+                    "Search Nigerian property websites when the database has fewer than 3 results. "
+                    "Searches PropertyPro, Nigeria Property Centre, Jiji and other Nigerian property sites."
+                ),
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={
+                        "query": types.Schema(
+                            type=types.Type.STRING,
+                            description="Search query e.g. '3 bedroom apartment Lekki Lagos for rent'"
+                        )
+                    },
+                    required=["query"]
+                )
+            ),
+            types.FunctionDeclaration(
+                name="save_unverified_property",
+                description=(
                     "Save a property found from web search into the Nestio database "
-                    "as an unverified listing. Use this when web search finds a property "
-                    "that doesn't exist in our database yet."
+                    "as an unverified listing. Use this after search_web finds relevant properties."
                 ),
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "title": {"type": "string"},
-                        "description": {"type": "string"},
-                        "price": {"type": "number"},
-                        "address": {"type": "string"},
-                        "city": {"type": "string"},
-                        "latitude": {"type": "number"},
-                        "longitude": {"type": "number"},
-                        "property_type": {"type": "string"},
-                        "status": {"type": "string"},
-                        "source_url": {"type": "string"},
+                parameters=types.Schema(
+                    type=types.Type.OBJECT,
+                    properties={
+                        "title": types.Schema(type=types.Type.STRING),
+                        "description": types.Schema(type=types.Type.STRING),
+                        "price": types.Schema(type=types.Type.NUMBER),
+                        "address": types.Schema(type=types.Type.STRING),
+                        "city": types.Schema(type=types.Type.STRING),
+                        "latitude": types.Schema(type=types.Type.NUMBER),
+                        "longitude": types.Schema(type=types.Type.NUMBER),
+                        "property_type": types.Schema(type=types.Type.STRING),
+                        "status": types.Schema(type=types.Type.STRING),
+                        "source_url": types.Schema(type=types.Type.STRING),
                     },
-                    "required": ["title", "price", "city", "property_type", "status"]
-                }
-            },
-            {
-                "name": "search_web",
-                "description": (
-                    "Search Nigerian property websites for listings when the database "
-                    "doesn't have enough results. Use this after search_properties returns "
-                    "fewer than 3 results. Searches PropertyPro, Nigeria Property Centre, "
-                    "Jiji and other Nigerian property sites."
-                ),
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Search query e.g. '3 bedroom apartment Lekki Lagos for rent site:propertypro.ng'"
-                        }
-                    },
-                    "required": ["query"]
-                }
-            },
+                    required=["title", "price", "city", "property_type", "status"]
+                )
+            ),
         ]
-    }
+    )
 ]
-
 
 class ChatService:
     """
