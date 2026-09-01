@@ -15,7 +15,8 @@
 
 import os
 import json
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from sqlalchemy.orm import Session
 from app.repositories.property_repo import PropertyRepository
 from app.models.property import Property
