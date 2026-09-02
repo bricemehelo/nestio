@@ -190,7 +190,6 @@ class ChatService:
         """
         # Call our existing repository with the args Gemini extracted
         results = self.repo.get_all(
-            db=self.db,
             city=args.get("city"),
             property_type=args.get("property_type"),
             status=args.get("status"),
