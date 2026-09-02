@@ -29,25 +29,18 @@ class ChatResponse(BaseModel):
 
 # ── POST /api/chat/ ──────────────────────────────────────────
 # Recieve a user message, pass it to ChatService, return the AI response
-#@router.post("/", response_model=ChatResponse)
+@router.post("/", response_model=ChatResponse)
 def chat(request: ChatRequest, db: Session = Depends(get_db)):
-    """
-    Process a natural language property search query.
-    
-    Example request:
-    {
-        "message": "I need a 3 bedroom apartment in Lekki under 80 million"
-    }
-    """
-    # Initialise chat service with DB session
-    service = ChatService(db)
-    
-    # Process the message and return AI response
-    result = service.chat(request.message)
-    
-    return ChatResponse(
-        response=result["response"],
-        properties_found=result["properties_found"],
-        properties=result["properties"]
-    )
+    try:
+        service = ChatService(db)
+        result = service.chat(request.message)
+        return ChatResponse(
+            response=result["response"],
+            properties_found=result["properties_found"],
+            properties=result["properties"]
+        )
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise
 

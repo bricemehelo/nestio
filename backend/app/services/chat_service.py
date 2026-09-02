@@ -23,11 +23,6 @@ from app.models.property import Property
 from datetime import datetime
 from googleapiclient.discovery import build
 
- 
-# Configure Gemini with our API key from .env
- client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-# Configure Gemini with our API key from .env
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # ── Tool Definitions ──────────────────────────────────────────
 # Tools are functions Gemini can call to get real data.
@@ -141,20 +136,7 @@ class ChatService:
         
         # Initialise Gemini model with tool use enabled
         # gemini-1.5-flash is fast and free tier friendly
-        self.model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            tools=tools,
-            system_instruction=(
-                "You are Nestio AI, a helpful property search assistant for Nigerian real estate. "
-                "You help users find properties in Lagos, Port Harcourt, Abuja and other Nigerian cities. "
-                "Always search the database first using search_properties. "
-                "If you find fewer than 3 results, mention that data is limited "
-                "and describe what properties you did find. "
-                "Be conversational, helpful, and specific about Nigerian locations. "
-                "Format prices in Naira (₦) with proper formatting e.g. ₦85,000,000. "
-                "Always mention the neighbourhood, not just the city."
-            )
-        )
+        
 
     def _search_web(self, query: str) -> list:
         """
