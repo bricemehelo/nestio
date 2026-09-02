@@ -23,6 +23,8 @@ from app.models.property import Property
 from datetime import datetime
 from googleapiclient.discovery import build
 
+# ← ADD THIS LINE HERE — top level, no indentation
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # ── Tool Definitions ──────────────────────────────────────────
 # Tools are functions Gemini can call to get real data.
