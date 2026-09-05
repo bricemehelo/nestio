@@ -140,7 +140,7 @@ class ChatService:
         # gemini-1.5-flash is fast and free tier friendly
         
 
-    def _search_web(self, query: str) -> list:
+    def _execute_search_web(self, query: str) -> list:
         """
         Search Nigerian property sites using Google Custom Search API.
         Returns a list of raw search results for Gemini to process.
@@ -189,7 +189,7 @@ class ChatService:
         Returns results as a JSON string for Gemini to read.
         """
         # Call our existing repository with the args Gemini extracted
-        results = self.repo.get_all(
+        properties, total = self.repo.get_all(
             city=args.get("city"),
             property_type=args.get("property_type"),
             status=args.get("status"),
@@ -199,8 +199,6 @@ class ChatService:
             skip=0,
             limit=10
         )
-
-        properties = results["properties"]
 
         if not properties:
             return json.dumps({
@@ -226,6 +224,7 @@ class ChatService:
 
         return json.dumps({
             "found": len(formatted),
+            "total": total,
             "properties": formatted
         })
 
@@ -340,9 +339,11 @@ class ChatService:
                             found_properties.extend(result_data["properties"])
 
                     elif tool_name == "search_web":
-                        tool_result = self._execute_search_web(
-                            tool_args.get("query", "")
-                        )
+                        web_results = self._execute_search_web(tool_args.get("query", ""))
+                        tool_result = json.dumps({
+                            "results_found": len(web_results),
+                            "results": web_results,
+                        })
 
                     elif tool_name == "save_unverified_property":
                         tool_result = self._execute_save_unverified_property(tool_args)
@@ -384,103 +385,6 @@ class ChatService:
 
         return {
             "response": "I could not complete the search. Please try again.",
-            "properties_found": 0,
-            "properties": []
-        }
-    
-        """
-        Main entry point — process a user message and return AI response.
-        
-        Args:
-            message: Natural language property search query from user
-            
-        Returns:
-            dict with 'response' (AI text) and 'properties' (any found listings)
-        """
-        # Start a chat session with Gemini
-        chat_session = self.model.start_chat()
-
-        # Send user message to Gemini
-        response = chat_session.send_message(message)
-
-        # Track properties found during this conversation
-        found_properties = []
-
-        # ── Tool Use Loop ─────────────────────────────────────
-        # Gemini may call multiple tools in sequence.
-        # We loop until Gemini stops calling tools and gives a final text response.
-        max_iterations = 5  # prevent infinite loops
-        iteration = 0
-
-        while iteration < max_iterations:
-            iteration += 1
-            tool_calls_made = False
-
-            # Check if Gemini wants to call any tools
-            for candidate in response.candidates:
-                for part in candidate.content.parts:
-                    if hasattr(part, 'function_call') and part.function_call.name:
-                        tool_calls_made = True
-                        tool_name = part.function_call.name
-                        tool_args = dict(part.function_call.args)
-
-                        # Execute the tool Gemini requested
-                        if tool_name == "search_properties":
-                            tool_result = self._execute_search_properties(tool_args)
-                            
-                            # Track found properties for the frontend
-                            result_data = json.loads(tool_result)
-                            if result_data.get("properties"):
-                                found_properties.extend(result_data["properties"])
-
-                        elif tool_name == "save_unverified_property":
-                            tool_result = self._execute_save_unverified_property(tool_args)
-
-                        elif tool_name == "search_web":
-                            # Execute real web search against Nigerian property sites
-                            web_results = self._search_web(tool_args.get("query", ""))
-                            tool_result = json.dumps({
-                                "results_found": len(web_results),
-                                "results": web_results,
-                                "instruction": (
-                                    "For each relevant result, call save_unverified_property "
-                                    "to save it to the database before responding to the user."
-                                )
-                            })
-
-                        else:
-                            tool_result = json.dumps({"error": f"Unknown tool: {tool_name}"})
-
-                        # Send tool result back to Gemini so it can continue
-                        response = chat_session.send_message(
-                            genai.protos.Content(
-                                parts=[genai.protos.Part(
-                                    function_response=genai.protos.FunctionResponse(
-                                        name=tool_name,
-                                        response={"result": tool_result}
-                                    )
-                                )],
-                                role="user"
-                            )
-                        )
-
-            # If no tool calls were made, Gemini has finished — extract text response
-            if not tool_calls_made:
-                final_text = ""
-                for candidate in response.candidates:
-                    for part in candidate.content.parts:
-                        if hasattr(part, 'text'):
-                            final_text += part.text
-
-                return {
-                    "response": final_text,
-                    "properties_found": len(found_properties),
-                    "properties": found_properties
-                }
-
-        # Fallback if max iterations reached
-        return {
-            "response": "I searched for properties but couldn't complete the request. Please try again.",
             "properties_found": 0,
             "properties": []
         }

@@ -6,11 +6,12 @@
 # PATTERN: Router layer — HTTP only. No business logic here.
 # All AI logic lives in ChatService.
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session 
 from pydantic import BaseModel
 from app.database import get_db
 from app.services.chat_service import ChatService
+from google.genai.errors import ServerError
 
 # ── Router setup ─────────────────────────────────────────────
 # prefix="/api/chat" means all routes here start with /api/chat
@@ -39,6 +40,11 @@ def chat(request: ChatRequest, db: Session = Depends(get_db)):
             properties_found=result["properties_found"],
             properties=result["properties"]
         )
+    except ServerError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"AI service is currently unavailable. Please try again later. Error: {exc}"
+        ) from exc
     except Exception as e:
         import traceback
         traceback.print_exc()
