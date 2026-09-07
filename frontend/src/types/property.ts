@@ -71,4 +71,6 @@ export interface PropertyFilters {
 export interface ChatProperty {
   id: number;
   title: string;
+  price: number;
+  address: string;
 }
