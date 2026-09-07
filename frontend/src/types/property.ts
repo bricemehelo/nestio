@@ -67,17 +67,3 @@ export interface PropertyFilters {
   min_price?: number;
   max_price?: number;
 }
-
-export interface ChatProperty {
-  id: number;
-  title: string;
-  price: number;
-  address: string;
-  city: string;
-  latitude: number;
-  longitude: number;
-  property_type: string;
-  status: string;
-  verified: boolean;
-  description: string;
-}
