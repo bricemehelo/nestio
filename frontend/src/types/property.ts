@@ -67,3 +67,8 @@ export interface PropertyFilters {
   min_price?: number;
   max_price?: number;
 }
+
+export interface ChatProperty {
+  id: number;
+  title: string;
+}
