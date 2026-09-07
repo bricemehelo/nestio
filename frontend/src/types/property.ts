@@ -73,4 +73,11 @@ export interface ChatProperty {
   title: string;
   price: number;
   address: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+  property_type: string;
+  status: string;
+  verified: boolean;
+  description: string;
 }
