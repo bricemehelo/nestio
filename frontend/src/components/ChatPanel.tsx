@@ -13,3 +13,23 @@ import type { ChatMessage, ChatProperty } from "../types/chat";
 interface ChatPanelProps {
   onProrpertySelect: (property: ChatProperty) => void;
 }
+
+export function ChatPanel({ onPropertySelect }: ChatPanelProps) {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  const chatMutation = useMutation({
+    mutationFn: sendChatMessage,
+
+    onSuccess: (data) => {
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: data.response,
+          properties: data.properties,
+        },
+      ]);
+    },
+  });
