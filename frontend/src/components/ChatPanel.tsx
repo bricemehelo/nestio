@@ -8,4 +8,8 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { sendChatMessage } from "../api/chat";
-import type { ChatResponse } from "../types/chat";
+import type { ChatMessage, ChatProperty } from "../types/chat";
+
+interface ChatPanelProps {
+  onProrpertySelect: (property: ChatProperty) => void;
+}
