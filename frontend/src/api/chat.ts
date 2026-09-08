@@ -7,7 +7,7 @@
 // behind a clean interface, typed end to end.
 
 import { apiClient } from "./client";
-import type { ChatProperty, ChatResponse } from "../types/chat";
+import type { ChatResponse } from "../types/chat";
 
 export const sendChatMessage = async (
   message: string,
