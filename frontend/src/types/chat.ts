@@ -17,3 +17,10 @@ export interface ChatResponse {
   properties_found: number;
   properties: ChatProperty[];
 }
+
+export interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  properties?: ChatProperty[];
+}
