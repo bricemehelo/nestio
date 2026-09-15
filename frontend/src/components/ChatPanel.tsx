@@ -8,12 +8,12 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { sendChatMessage } from "../api/chat";
-import type { ChatMessage, ChatProperty } from "../types/chat";
+import type { ChatMessage } from "../types/chat";
 import { useSetAtom } from "jotai";
-import { selectedPropertyAtom } from "../store/propertyAtoms";
+import { selectedPropertyIdAtom } from "../store/propertyAtoms";
 
 export function ChatPanel() {
-  const setSelectedProperty = useSetAtom(selectedPropertyAtom);
+  const setSelectedProperty = useSetAtom(selectedPropertyIdAtom);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
