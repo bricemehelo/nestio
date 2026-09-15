@@ -13,7 +13,7 @@ import { useSetAtom } from "jotai";
 import { selectedPropertyIdAtom } from "../store/propertyAtoms";
 
 export function ChatPanel() {
-  const setSelectedProperty = useSetAtom(selectedPropertyIdAtom);
+  const setSelectedPropertyId = useSetAtom(selectedPropertyIdAtom);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
@@ -80,7 +80,7 @@ export function ChatPanel() {
               <button
                 className="chat-property-card"
                 key={property.id}
-                onClick={() => setSelectedProperty(property)}
+                onClick={() => setSelectedPropertyId(property.id)}
                 type="button"
               >
                 <strong>{property.title}</strong>
