@@ -11,7 +11,7 @@ import { sendChatMessage } from "../api/chat";
 import type { ChatMessage, ChatProperty } from "../types/chat";
 
 interface ChatPanelProps {
-  onProrpertySelect: (property: ChatProperty) => void;
+  onPropertySelect: (property: ChatProperty) => void;
 }
 
 export function ChatPanel({ onPropertySelect }: ChatPanelProps) {
