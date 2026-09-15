@@ -4,10 +4,11 @@
 //
 //
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { sendChatMessage } from "../api/chat";
-import type { ChatResponse } from "../types/chat";
 
-const mutation = useMutation({
-  mutationFn: sendChatMessage,
-});
+export const useChat = () => {
+  return useMutation({
+    mutationFn: sendChatMessage,
+  });
+};
