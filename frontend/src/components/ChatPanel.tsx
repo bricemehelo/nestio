@@ -80,7 +80,7 @@ export function ChatPanel() {
               <button
                 className="chat-property-card"
                 key={property.id}
-                onClick={() => onPropertySelect(property)}
+                onClick={() => setSelectedProperty(property)}
                 type="button"
               >
                 <strong>{property.title}</strong>
