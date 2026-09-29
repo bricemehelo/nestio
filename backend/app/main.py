@@ -79,10 +79,11 @@ def health():
 
 @app.on_event("startup")
 def run_migrations():
+    print("Startup: application initialized")
     # Skip migrations during testing — conftest.py handles table creation
-    if os.getenv("TESTING") == "true":
-        return
+    # if os.getenv("TESTING") == "true":
+    #     return
     
-    if os.getenv("DATABASE_URL"):
-        alembic_cfg = Config("alembic.ini")
-        command.upgrade(alembic_cfg, "head")
+    # if os.getenv("DATABASE_URL"):
+    #     alembic_cfg = Config("alembic.ini")
+    #     command.upgrade(alembic_cfg, "head")
