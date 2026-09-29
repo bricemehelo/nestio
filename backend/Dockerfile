@@ -31,4 +31,4 @@ EXPOSE 8000
 # Start the FastAPI server
 # 0.0.0.0 binds to all network interfaces inside the container
 # Without this, the server only accepts connections from localhost inside the container
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
